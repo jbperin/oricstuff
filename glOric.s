@@ -5130,7 +5130,7 @@ ScreenAdressLow
 	.byt <(DISPLAY_ADRESS+40*26)
 	.byt <(DISPLAY_ADRESS+40*27)
 
-; This table contains hight 8 bits of the adress
+; This table contains high 8 bits of the adress
 ScreenAdressHigh
 	.byt >(DISPLAY_ADRESS+40*0)
 	.byt >(DISPLAY_ADRESS+40*1)

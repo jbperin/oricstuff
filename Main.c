@@ -56,11 +56,14 @@
 extern void ScreenCopyHires();
 extern void HiresClear();
 
+extern unsigned char exp_tab[];
+extern unsigned char log2_tab[];
 
 #define abs(x)                 (((x)<0)?-(x):(x))
 
 #include "hrs.c"
 #include "myHires.c"
+#include "img.c"
 
 #define lrscrmem(l,c,v) poke (LORES_SCREEN_ADDRESS+((l)*SCREEN_WIDTH)+(c),(v))
 
@@ -91,16 +94,89 @@ void chrplot (l,c, ink){
     cv |= 0x20>>pidx; 
     *((char*)(HIRES_SCREEN_ADDRESS+l*SCREEN_WIDTH + hidx)) = cv;
 }
+
+void displayImage(){
+       // image
+   hires();
+   poke(0x26a, 10);
+   memcpy((void *)0xa000, img, 8000);
+   key();
+   get();
+}
+
+void mult(unsigned char x, unsigned char y, unsigned char *r){
+    printf ("%d %d ", log2_tab[x] , log2_tab[y]);
+    *r = exp_tab[log2_tab[x] + log2_tab[y]];
+}
+
+void det(unsigned char ux, unsigned char uy, unsigned char vx, unsigned char vy, unsigned char *r){
+    unsigned char r1, r2;
+    printf ("ux = %d, uy = %d, vx = %d, vy = %d\n", ux, uy, vx, vy);get();
+    mult(ux, vy, &r1);
+    mult(uy, vx, &r2);
+    printf ("r1 = %d, r2 = %d\n", r1, r2);get();
+    *r = r1-r2;
+}
+
+void uvmap (){
+    unsigned char Px, Py, P0x, P0y, P1x, P1y, P2x, P2y;
+    unsigned char v1x, v1y, v2x, v2y, vx, vy;
+    unsigned char rx2, r02, rx1, r01, r12;
+    unsigned char a, b;
+    
+    P0x = 20;   P0y = 20;
+    P1x = 180;  P1y= 40;
+    P2x = 40;   P2y = 140;
+    
+    Px = 100;   Py = 90;
+
+    v1x = P1x-P0x; v1y = P1y - P0y;
+    v2x = P2x-P0x; v2y = P2y - P0y;
+    vx = Px - P0x;
+    vy = Py - P0y;
+
+    det(vx, vy, v2x, v2y, &rx2);
+    // det(P0x, P0y, v2x, v2y, &r02);
+    // det(vx, vy, v1x, v1y, &rx1);
+    // det(P0x, P0y, v1x, v1y, &r01);
+    // det(v1x, v1y, v2x, v2y, &r12);
+
+    // printf ("rx2 = %d, r02 = %d, rx1 = %d, r01 = %d, r12 = %d\n", rx2, r02, rx1, r01, r12);
+    // a = rx2-r02;
+    // b = rx1-r01;
+    // printf ("a = %d, b = %d\n", a, b);
+    printf ("rx2 = %d\n", rx2);get();
+}
+extern void SetUpTables();
+
 void main()
 {
     int ii;
+    unsigned char res;
+     
+    // displayImage();
+
+    // mult(160, 6, &res);
+    // printf ("%d", res); get();
+    // mult(8, 12, &res);
+    // printf ("%d", res); get();
+    // mult(7, 9, &res);
+    // printf ("%d", res); get();
+    
+    //uvmap ();
+    
+    
+    SetUpTables();
     // hires();
     myHires();
+
     // hrscrmem(10,10,CHANGE_INK_TO_GREEN);
     // hrscrmem(10,12,0x55);
     chrplot (100,120, CHANGE_INK_TO_GREEN);
     hrplot (101,121);
-// exampleDraw();
+
+
+
     // poke (0xbfdf, 0x1E);
     // poke (0x021f, 1);
 
