@@ -9,6 +9,7 @@
 #define HIRES_SCREEN_ADDRESS            0xA000
 #define STANDARD_CHARSET_ADDRESS        0xB400
 #define ALTERNATE_CHARSET_ADDRESS       0xB800
+#define STANDARD_HIRES_CHARSET_ADDRESS  0x9800
 #define NB_LESS_LINES_4_COLOR           4
 
 #define CHANGE_INK_TO_BLACK	            0		
@@ -77,6 +78,21 @@ extern unsigned char log2_tab[];
     poke (HIRES_SCREEN_ADDRESS+((6+(l))*SCREEN_WIDTH)+(c),(v)); \
     poke (HIRES_SCREEN_ADDRESS+((7+(l))*SCREEN_WIDTH)+(c),(v)); 
 
+
+void hrDrawChar(char code, unsigned char line, unsigned char column) {
+
+    unsigned char* adr;
+    adr =(unsigned char*)(STANDARD_HIRES_CHARSET_ADDRESS + code * 8);
+    poke (HIRES_SCREEN_ADDRESS+((0+(line))*SCREEN_WIDTH)+(column),0x40 | *(adr++)); // (*(unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8))); // 0x40 | *((unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8    )));
+    poke (HIRES_SCREEN_ADDRESS+((1+(line))*SCREEN_WIDTH)+(column),0x40 | *(adr++)); // (*(unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 1))); // 0x40 | *((unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 1)));
+    poke (HIRES_SCREEN_ADDRESS+((2+(line))*SCREEN_WIDTH)+(column),0x40 | *(adr++)); // (*(unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 2))); // 0x40 | *((unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 2)));
+    poke (HIRES_SCREEN_ADDRESS+((3+(line))*SCREEN_WIDTH)+(column),0x40 | *(adr++)); // (1)); // 0x40 | *((unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 3)));
+    poke (HIRES_SCREEN_ADDRESS+((4+(line))*SCREEN_WIDTH)+(column),0x40 | *(adr++)); // (1)); // 0x40 | *((unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 4)));
+    poke (HIRES_SCREEN_ADDRESS+((5+(line))*SCREEN_WIDTH)+(column),0x40 | *(adr++)); // (1)); // 0x40 | *((unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 5)));
+    poke (HIRES_SCREEN_ADDRESS+((6+(line))*SCREEN_WIDTH)+(column),0x40 | *(adr++)); // (1)); // 0x40 | *((unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 6)));
+    poke (HIRES_SCREEN_ADDRESS+((7+(line))*SCREEN_WIDTH)+(column),0x40 | *(adr++)); // (1)); // 0x40 | *((unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 7)));
+
+}
 void hrplot (l,c){
     char cv ;
     unsigned char hidx = c/6;   
@@ -104,49 +120,7 @@ void displayImage(){
    get();
 }
 
-void mult(unsigned char x, unsigned char y, unsigned char *r){
-    printf ("%d %d ", log2_tab[x] , log2_tab[y]);
-    *r = exp_tab[log2_tab[x] + log2_tab[y]];
-}
 
-void det(unsigned char ux, unsigned char uy, unsigned char vx, unsigned char vy, unsigned char *r){
-    unsigned char r1, r2;
-    printf ("ux = %d, uy = %d, vx = %d, vy = %d\n", ux, uy, vx, vy);get();
-    mult(ux, vy, &r1);
-    mult(uy, vx, &r2);
-    printf ("r1 = %d, r2 = %d\n", r1, r2);get();
-    *r = r1-r2;
-}
-
-void uvmap (){
-    unsigned char Px, Py, P0x, P0y, P1x, P1y, P2x, P2y;
-    unsigned char v1x, v1y, v2x, v2y, vx, vy;
-    unsigned char rx2, r02, rx1, r01, r12;
-    unsigned char a, b;
-    
-    P0x = 20;   P0y = 20;
-    P1x = 180;  P1y= 40;
-    P2x = 40;   P2y = 140;
-    
-    Px = 100;   Py = 90;
-
-    v1x = P1x-P0x; v1y = P1y - P0y;
-    v2x = P2x-P0x; v2y = P2y - P0y;
-    vx = Px - P0x;
-    vy = Py - P0y;
-
-    det(vx, vy, v2x, v2y, &rx2);
-    // det(P0x, P0y, v2x, v2y, &r02);
-    // det(vx, vy, v1x, v1y, &rx1);
-    // det(P0x, P0y, v1x, v1y, &r01);
-    // det(v1x, v1y, v2x, v2y, &r12);
-
-    // printf ("rx2 = %d, r02 = %d, rx1 = %d, r01 = %d, r12 = %d\n", rx2, r02, rx1, r01, r12);
-    // a = rx2-r02;
-    // b = rx1-r01;
-    // printf ("a = %d, b = %d\n", a, b);
-    printf ("rx2 = %d\n", rx2);get();
-}
 extern void SetUpTables();
 
 void main()
@@ -164,14 +138,53 @@ void main()
     // printf ("%d", res); get();
     
     //uvmap ();
+    char code = 'A';
+
+    unsigned char pat01 = *(unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8    );
+    unsigned char pat02 = *(unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 1);
+    unsigned char pat03 = *(unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 2);
+    unsigned char pat04 = *(unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 3);
+    unsigned char pat05 = *(unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 4);
+    unsigned char pat06 = *(unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 5);
+    unsigned char pat07 = *(unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 6);
+    unsigned char pat08 = *(unsigned char*)(STANDARD_CHARSET_ADDRESS + code * 8 + 7);
+    unsigned char v;
+    unsigned char *adr;
+ 
     
-    
+    printf ("%x %x %x %x %x %x %x %x\n", 
+        pat01,
+        pat02,
+        pat03,
+        pat04,
+        pat05,
+        pat06,
+        pat07,
+        pat08
+    );
+
+
+
+
+
+    get();
     SetUpTables();
     // hires();
     myHires();
 
-    // hrscrmem(10,10,CHANGE_INK_TO_GREEN);
-    // hrscrmem(10,12,0x55);
+    hrscrmem(10,10,CHANGE_INK_TO_BLUE);
+    hrDrawChar('A', 10, 12);
+
+
+    // 
+    // hrDrawChar(code, 10, 12);
+
+    hrscrmem(20,10,CHANGE_INK_TO_GREEN);
+    hrscrmem(20,12,0x55);
+
+    // h
+    
+
     chrplot (100,120, CHANGE_INK_TO_GREEN);
     hrplot (101,121);
 

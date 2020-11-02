@@ -376,12 +376,12 @@ Program 7.15 Remove large shape (#115E—#1186)
 103F: 48        PHA
 1040: 98        TYA
 1041: 48        PHA
-1042: AS S&F    LDA S8F
+1042: AS S&F    LDA $8F
 1044: 6&5 8D    STA $8D
 1046: C8        INY
 1047: C8        INY
 1048: 20 98 10  JSR $1098
-104B: 8&5 GF    STA S8F
+104B: 8&5 GF    STA $8F
 104D: DO 08     BNE $1057
 104F: AS SE     LDA $8E
 1051: FO 04     BEQ $1057

@@ -447,137 +447,143 @@ label_1183:
 .)
 
 
-Paint:
-.(
-    SEI
-    LDX #S0F
-    LDA _var_80,X
-    STA $10E2,X
-    DEX
-    BPL $1003
-    CLD
-    JSR $1200
-    LDX $00
-    LDY $01
-    LDA #$00
-    STA _var_8C
-    LDA #$FF
-    PHA
-    PHA
-    BNE $1021
-    PLA
-    TAY
-    PLA
-    TAX
-    CPX #SFF
-    BEQ $1084
-    LDA _var_8C
-    BNE $102F
-    LDA $#01
-    STA _var_8D
-    STA _var_8E
-    JSR $10A2
-    DEY
-    JSR $1098
-    STA _var_8F
-    BNE $1042
-    LDA _var_8D
-    BEQ $1042
-    TXA
-    PHA
-    TYA
-    PHA
-    LDA S8F
-    STA _var_8D
-    INY
-    INY
-    JSR $1098
-    STA S8F
-    BNE $1057
-    LDA _var_8E
-    BEQ $1057
-    TXA
-    PHA
-    TYA
-    PHA
-    LDA _var_8F
-    STA _var_8E
-    DEY
-    DEX
-    JSR $1098
-    BNE $106C
-    TXA
-    PHA
-    TYA
-    PHA
-    LDA #$01
-    STA _var_8C
-    BNE %1070
-    LDA #$00
-    STA _var_8C
-    INX
-    INX
-    JSR $1098
-    BNE $107F
-    TXA
-    PHA
-    TYA
-    PHA
-    LDA #$01
-    STA _var_8C
-    DEX
-    LDA #$00
-    BEQ $101D
-    LDX #$0F
-    LDA $10E2,X
-    STA _var_80,X
-    DEX
-    BPL $1086
-    CLI
-    RTS
-    STY _var_80
-    JSR $137E
-    LDY _var_80
-    RTS
-    STY _var_80
-    JSR $1398
-    PHP
-    LDY _var_80
-    PLP
-    RTS
-    STX _var_82
-    STY _var_83
-    TSX
-    STX _var_8F
-    INX
-    INX
-    INX
-    LDA $0100,X
-    CMP #$FF
-    BEQ $10D8
-    CMP _var_83
-    BNE $10D3
-    LDA $0101,X
-    CMP _var_82
-    BNE $10D3
-    DEX
-    CPX _var_8F
-    BEQ $10CC
-    LDA $0100,X
-    STA $0102,X
-    SEC
-    BCS $10BE
-    INC _var_8F
-    INC _var_8F
-    SEC
-    BCS $10D8
-    INX
-    INX
-    SEC
-    BCS $10AC
-    LDX _var_8F
-    TXS
-    LDX _var_82
-    LDY _var_83
-    JMP $1090
-.)
+; Paint:
+; .(
+;     SEI
+;     LDX #$0F
+;     LDA _var_80,X
+;     STA $10E2,X
+;     DEX
+;     BPL $1003
+;     CLD
+;     JSR label_1200
+;     LDX $00
+;     LDY $01
+;     LDA #$00
+;     STA _var_8C
+;     LDA #$FF
+;     PHA
+;     PHA
+;     BNE label_1021
+;     PLA
+;     TAY
+;     PLA
+;     TAX
+;     CPX #$FF
+;     BEQ label_1084
+;     LDA _var_8C
+;     BNE label_102F
+;     LDA #$01
+;     STA _var_8D
+;     STA _var_8E
+;     JSR $10A2
+;     DEY
+;     JSR $1098
+;     STA _var_8F
+;     BNE $1042
+;     LDA _var_8D
+;     BEQ $1042
+;     TXA
+;     PHA
+;     TYA
+;     PHA
+;     LDA _var_8F
+;     STA _var_8D
+;     INY
+;     INY
+;     JSR $1098
+;     STA _var_8F
+;     BNE $1057
+;     LDA _var_8E
+;     BEQ $1057
+;     TXA
+;     PHA
+;     TYA
+;     PHA
+;     LDA _var_8F
+;     STA _var_8E
+;     DEY
+;     DEX
+;     JSR $1098
+;     BNE $106C
+;     TXA
+;     PHA
+;     TYA
+;     PHA
+;     LDA #$01
+;     STA _var_8C
+;     BNE $1070
+;     LDA #$00
+;     STA _var_8C
+;     INX
+;     INX
+;     JSR $1098
+;     BNE $107F
+;     TXA
+;     PHA
+;     TYA
+;     PHA
+;     LDA #$01
+;     STA _var_8C
+;     DEX
+;     LDA #$00
+;     BEQ $101D
+;     LDX #$0F
+;     LDA $10E2,X
+;     STA _var_80,X
+;     DEX
+;     BPL $1086
+;     CLI
+;     RTS
+
+; label_1090:    
+;     STY _var_80
+;     JSR $137E
+;     LDY _var_80
+;     RTS
+
+; label_1098:    
+;     STY _var_80
+;     JSR $1398
+;     PHP
+;     LDY _var_80
+;     PLP
+;     RTS
+
+; label_10A2: 
+;     STX _var_82
+;     STY _var_83
+;     TSX
+;     STX _var_8F
+;     INX
+;     INX
+;     INX
+;     LDA $0100,X
+;     CMP #$FF
+;     BEQ $10D8
+;     CMP _var_83
+;     BNE $10D3
+;     LDA $0101,X
+;     CMP _var_82
+;     BNE $10D3
+;     DEX
+;     CPX _var_8F
+;     BEQ $10CC
+;     LDA $0100,X
+;     STA $0102,X
+;     SEC
+;     BCS $10BE
+;     INC _var_8F
+;     INC _var_8F
+;     SEC
+;     BCS $10D8
+;     INX
+;     INX
+;     SEC
+;     BCS $10AC
+;     LDX _var_8F
+;     TXS
+;     LDX _var_82
+;     LDY _var_83
+;     JMP $1090
+; .)
