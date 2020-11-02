@@ -1,0 +1,473 @@
+1200: A2 00     LDX #$00
+1202: AO OO     LDY #$00
+1204: 84 8O     STX $80
+1206: 8A        TXA
+1207: OA        ASL    
+1208: OA        ASL 
+1209: OA        ASL
+120A: OA        ASL
+120B: 99 0O 15  STA $1500,Y
+120E: AS Go     LDA $80
+1210: 99 OO 14  STA $1400,Y
+1213: C8        INY
+1214: FO OC     BEQ $1222
+1216: E8        INX
+1217: EO O06    CPX #$06
+1219: DO EB     BNE $1206
+121B: E6 80     INC $80
+121D: A2 0O     LDX #$00
+
+121F: FO E5     BEQ $1206
+1221: EA        NOP
+1222: A9 AO     LDA #$A0
+1224: 85 81     STA $81
+1226: A9 OO     LDA #$00
+1228: A8        TAY
+1229: 85 80     STA $80
+122B: A5 80     LDA $80
+122D: 99 0O 16  STA $1600,Y
+1230: AS 81     LDA $81
+1232: 99 OO 17  STA $1700,Y
+1235: AS eo     LDA $80
+1237: 18        CLC
+1238: 69 28     ADC #$28
+123A: & 680     STA $80
+123C: 90 02     BCC $1240
+123E: E64 81    INC $81
+1240: C8        INY
+1241: DO E8     BNE $122B
+1243: 60        RTS
+
+1244: 835 SC    STA $8C
+1246: 84 8D     STY $8D
+1248: A? OO     LDA #$00
+124A: 835 80    STA $80
+124C: AY OO.    LDA #$00
+124E: 685 85    STA $85
+1250: 86 84     STX $84
+1252: O06 84    ASL $84
+1254: 26 85     ROL $85
+1256: O06 84    ASL $84
+1258: 26 8&3    ROL $85
+125A: 06 84     ASL $84
+125C: 26        ROL $85
+125E: 18        CLC
+125F: AS 85     LDA $85
+1261: 69 98     ADC #$98
+1263: 85 85     STA $85
+1265: AO 00     LDY #$00
+1267: Bl 84     LDA ($84),Y
+1269: 9&5 87    STA $87
+126B:  AI 00    LDA #$00
+126D: GS 88     STA $88
+126F: Aé BO     LDX $80
+1271: FO OB     BEQ $127E
+1273: 46 87     LSR $87
+1275: 66        ROR $88
+1277: CA        DEX
+1278: DO F9     BNE $1273
+127A: 46 88     LSR $88
+127C: 46        LSR $88
+127E: AS 87     LDA $87
+1280: 91 8C     STA ($8C),Y
+1282: 98        TYA
+1283: 48        PHA
+1284: 09 O08    ORA #$08
+1286: AB        TAY
+1287: AS 88     LDA $88
+1289: 91 BC     STA ($8C),Y
+128B: 68        PLA
+12BC: AB        TAY
+128D: ce        INY
+128E: CO 08     CPY #$08
+1290: DO DS     BNE $1267
+1292: 18        CLC
+1293: AS 6c     LDA $8C
+1295: 69 10     ADC #$10
+1297: 85 8c     STA $8C
+1299: 90 02     BCC $129D
+129B: E& 8D     INC $8D
+129D: £46 80    INC $80
+129F: AS 80     LDA $80
+12A1: CY 06     CMP #$06
+12A3: DO CO     BNE $1265
+12A5: 40        RTS
+
+
+12A6: A4 8B     LDY $8B
+12A8: BI 00 16  LDA $1600,Y
+12AB: 85 82     STA $82
+12AD: BY 0O 17  LDA $1700,Y
+12B0: 85 83     STA $83
+12B2: A4 BA     LDY $8A
+12B4: B9 OO 14  LDA $1400,Y
+12B7: 18        CLC
+12B8: 65 82     ADC $82
+12BA: 985 82    STA $82
+12BC: 90 02     BCC $12C0
+12BE: E6 83     INC $83
+12CO: B9 00 15  LDA $1500,Y
+12C3: 18        CLC
+12C4: 65 8C     ADC $8C
+12C6: 85 8C     STA $8C
+12C8: 90 02     BCC $12CC
+12CA: E6 8D     INC $8D
+12CC: 60        RTS
+
+
+12CD: 85 SC     STA $8C
+12CF: 84 8D     STY $8D
+12D1: 20 A 12   JSR $12A6
+12D4: AO 00     LDY #$00
+12D6: Bi 82     LDA ($82),Y
+12D8: 51 SC     EOR ($8C),Y
+12DA: 91 82     STA ($82),Y
+12DC: 98        TYA
+12DD: 48        PHA
+12DE: 9O9 O08   ORA #$08
+12EO: A8        TAY
+12E1: Bi sc     LDA ($8C),Y
+12E3: AA        TAX
+12E4: 68        PLA
+12E5: As        TAY
+12E6: CB        INY
+12E7: 8A        TXA
+12E8: Si 682    EOR ($82),Y
+12EA: 91 82     STA ($82),Y
+12EC: 18        CLC
+12ED: AS 82     LDA $82
+12EF: 69 27     ADC #$27
+12F1: 85 82     STA $82
+12F3: 9O O02    BCC $12F7
+12F5: E6 83     INC $83
+12F7: CO 08     CPY #$08
+12F9: DO DB     BNE $12D6
+12FB: 60        RTS
+
+
+
+1360: 18        CLC
+1361: B9 00 16  LDA $1600,Y
+1364: 7D OO 14  ADC $1400,X
+1367: 85 82     STA $82
+1369: A9 OO     LDA #$00
+136B: 79 00 17  ADC $1700,Y
+136E: 85 83     STA $83
+1370: BD 00 15  LDA $1500, x
+1373: 4A        LSR
+1374: 4A        LSR
+1375: 4A        LSR
+1376: 4A        LSR
+1377: AB        TAY
+1378: B9 9E 13  LDA $139E,Y
+137B: AO 00     LDY #$00
+137D: 60        RTS
+
+Program 7.7 Fast pixel-addressing subroutine (#1360- ¢137D)
+
+139E: 20 10 08 04 02 01
+
+
+137E: 20 60 13  JSR $1360
+1381: 11 82     ORA ($82),Y
+1383: 91 82     STA ($82),Y
+1385: 60        RTS
+
+Program 7.8 Set dot (#137E- #1385)
+
+1386: 20 60 13  JSR $1360
+1369: 49 FF     EOR #$FF
+138B: 31 82     AND ($82),Y
+138D: 91 82     STA ($82),Y
+138F: 60        RTS
+
+Program 7.9 Clear dot (#1386— #138F)
+
+1390: 20 60 13  JSR $1360
+1393: 31 62     EOR ($82),Y
+1395: 91 82     STA ($82),Y
+1397: 60        RTS
+
+Program 7.10 Alter dot (#1390- #1397)
+
+1398: 20 60 13  JSR $1360
+139B: 31 82     AND ($82),Y
+139D: 60        RTS
+
+Program 7.11 Test dot (#1398-#139D)
+
+
+1187: 20 60 13  JSR $1360
+118A: Bl 82     LDA ($82),Y
+118C: 48        PHA
+118D: 98        TYA
+118E: AA        TAX
+118F: 09 O8     ORA #$08
+1191: A8        TAY
+1192: 68        PLA
+1193: 91 8C     STA ($8C),Y
+1195: 8A        TXA
+1196: A8        TAY
+1197: B1 82     LDA ($82),Y
+1199: C9 40     CMP #$40
+1198: D0 04     BNE $11A1
+119D: 91 82     LDA ($8C),Y
+119F: 91 82     STA ($82),Y
+11A1: 18        CLC
+11A2: A5 82     LDA $82
+11A4: 69 27     ADC #$27
+11A6: 85 82     STA $82
+11A8: 90 02     BCC $11AC
+11AA: E6 83     INC $83
+11AC: C8        INY
+11AD: C0 08     CPY #$08
+11AF: DO D9     BNE $118A
+11B1: 60        RTS
+
+Program 7.12 Colour character subroutine ( #1187- #11B1)
+
+11B2: 20 60 13  JSR $1360
+11B5: A5 8C     LDA $8C
+11B7: 09 08     ORA #$08
+11B9: 85 8C     STA $8C
+11BB: B1 8C     LDA ($8C),Y
+11BD: 971 82    STA ($82),Y
+11BF: 18        CLC
+11C0: A5 82     LDA $82
+11C2: 69 27     ADC #$27
+11C4: 635 82    STA $82
+11C6: 90 O2     BCC $11CA
+11C8: Eé 83     INC $83
+11CA: C8        INY
+11CB: C0 08     CPY #$08
+11CD: D0 EC     BNE $11BB
+11CF: 60        RTS
+
+Program 7.13 Remove colours ( #11B2-#11CF)
+
+
+10F2: 20 60 13  JSR $1360
+10F5: BD 00 15  LDA $1500,X
+10F8: 4A        LSR
+10F9: 4A        LSR
+10FA: 4A        LSR
+10FB: 4A        LSR
+10FC: 8S GA     STA $8A
+10FE: AS GF     LDA $8F
+1100: 8S 85     STA $85
+1102: Ad 00     LDY #$00
+1104: AV 00     LDA #$00
+1106: 8&3 64    STA $84
+1108: A9 OO     LDA #$00
+110A: 8&5 86    STA $86
+110C: Aé BA     LDX $8A
+110E: Bi 62     LDA ($82),Y
+1110: 91 BO     STA ($80),Y
+1112: Bi 6C     LDA ($8C),Y
+1114: C9? 40    CMP #$40
+1116: 90 19     BCC $1131
+1118: 29 BF     AND #$BF
+111A: EO 0O     CPX #$00
+111C: FO 07     BEQ $1125
+111E: 18        CLC
+111F: 6A        ROR
+1120: 646 86    ROR $86
+1122: CA        DEX
+1123: DBO FA    BNE $111F
+1125: 08 984    ORA $84
+1127: 46  86    LSR $86
+1129: 46  86    LSR $86
+112B: Aé B64    LDX $86
+112D: 86 84     STX $84
+112F: O09 40    ORA #$40
+1131: 91 G2     STA ($82),Y
+1133: C8        INY
+1134: C4 8E     CPY $8E
+1136: DO DO     BNE $1108
+1138: 18        CLC
+1139: AS 82     LDA $82
+113B: 69 28     ADC #$28
+113D: & 82      STA $82
+113F: 90 02     BCC $1143
+1141: E6 83     INC $83
+1143: 18        CLC
+1144: AS 60     LDA $80
+1146: 63 GE     ADC $8E
+1148: 68S 80    STA $80
+114A: 90 02     BCC $114E
+114C: E6 81     INC $81
+114E: 18        CLC
+114F: AS Sc     LDA $8C
+1251: 635 GE    ADC $8E
+1153: 685 sc    STA $8C
+1155: 90 02     BCC $1159
+1157: E6 8D     INC $8D
+1159: C6 85     DEC $85
+115B: D0 A5     BNE $1102
+115D: 60        RTS
+
+Program 7.14 Draw large shape (#10F2-#115D)
+
+
+115E: 20 60 13  JSR $1360
+1161: Aé GF     LDX $8F
+1163: A4 GE     LDY $8E
+1165: 98        DEY
+1166: Bi 80     LDA ($80),Y
+1168: 91 8&2    STA ($82),Y
+116A: 9886      DEY
+116B: 10 F9     BPL $1166
+116D: 18        CLC
+116E: AS 60     LDA $80
+1170: 635 BE    ADC $8E
+1172: & 80      STA $80
+1174: 90 02     BCC $1178
+1176: E6 81     INC $81
+1178: 18        CLC
+1179: @3        LDA $82
+117B: 69 2      ADC #$28
+117D: 8&3 62    STA $82
+117F: 90 O02    BCC $1183
+1181: E6 Bs     INC $83
+1183: CA        DEX
+1184: D0 DD     BNE $1163
+1186: 60        RTS
+
+Program 7.15 Remove large shape (#115E—#1186)
+
+
+
+
+1000: 78        SEI
+1001: A2 OF     LDX #S0F
+1003: 5S 80     LDA $80,X
+1005: 9D E2 10  STA $10E2,X
+1008: CA        DEX
+1009: 10 F8     BPL $1003
+100B: De        CLD
+100C: 20 00 12  JSR $1200
+100F: Aé 00     LDX $00
+1011: A4 O1     LDY $01
+1013: A? 00     LDA #$00
+1015: 85 ac     STA $8C
+1017: AI FF     LDA #$FF
+1019: 48        PHA
+101A: 48        PHA
+101B: DO 04     BNE $1021
+101D: 68        PLA
+101E: AG        TAY
+101F: 68        PLA
+1020: AA        TAX
+1021: EO FF     CPX #SFF
+1023: FO SF     BEQ $1084
+1025: AS 8c     LDA $8C
+1027: DO 06     BNE $102F
+1029: a9 O1     LDA $#01
+102B: &5 8D     STA $8D
+102D: 8&3 SE    STA $8E
+102F: 20 A2 10  JSR $10A2
+1032: 88        DEY
+1033: 20 98 10  JSR $1098
+1036: 6S GF     STA $8F
+1038: DO 08     BNE $1042
+103A: AS SD     LDA $8D
+103C: FO 04     BEQ $1042
+103E: 6A        TXA
+103F: 48        PHA
+1040: 98        TYA
+1041: 48        PHA
+1042: AS S&F    LDA S8F
+1044: 6&5 8D    STA $8D
+1046: C8        INY
+1047: C8        INY
+1048: 20 98 10  JSR $1098
+104B: 8&5 GF    STA S8F
+104D: DO 08     BNE $1057
+104F: AS SE     LDA $8E
+1051: FO 04     BEQ $1057
+1053: 8A        TXA
+1054: 48        PHA
+1055: 98        TYA
+1056: 48        PHA
+1057: AS GF     LDA $8F
+1059: 85 GE     STA $8E
+105B: 88        DEY
+105C: CA        DEX
+105D: 720 98 10 JSR $1098
+1060: DO OA     BNE $106C
+1062: 8A        TXA
+1063: 48        PHA
+1064: 998       TYA
+1065: 48        PHA
+1066: A Ol      LDA #$01
+1068: 6&5 ec    STA $8C
+106A: DO O04    BNE %1070
+106C: A? 00     LDA #$00
+106E: 8&5 SC    STA $8C
+1070: EB        INX
+1071: E8        INX
+1072: 20 98 10  JSR $1098
+1075: DO 08     BNE $107F
+1077: 8A        TXA
+1078: 48        PHA
+1079: 98        TYA
+107A: 48        PHA
+107B: A? 01     LDA #$01
+107D: 6&5 8c    STA $8C
+107F: CA        DEX
+1080: A9 0O     LDA #$00
+1082: FO 99     BEQ $101D
+1084: A2 OF     LDX #$0F
+1086: E2 10     LDA $10E2,X
+1089: 935 80    STA $80,X
+108B: CA        DEX
+108C: 10 F8     BPL $1086
+108E: Se        CLI
+108F: 60        RTS
+1090: 8&4 80    STY $80
+1092: 20 7E 13  JSR $137E
+1095: A4 80     LDY $80
+1097: 60        RTS
+1098: 984 80    STY $80
+109A: 20 98 13  JSR $1398
+109D: 08        PHP
+109E: A4 80     LDY $80
+10A0: 28        PLP
+10A1: 60        RTS
+10A2: 86 8&2    STX $82
+10A4: 84 8&3    STY $83
+10A6: BA        TSX
+10A7: 86 GF     STX $8F
+10A9: E8        INX
+10AA: E8        INX
+10AB: €E8       INX
+10AC: BD OO 01  LDA $0100,X
+10AF: C9 FF     CMP #$FF
+10B1: FO 25     BEQ $10D8
+10B3: CS ss     CMP $83
+10B5: DO 1c     BNE $10D3
+10B7: BD 01 O1  LDA $0101,X
+10BA: CS 82     CMP $82
+10BC: DO 15     BNE $10D3
+10BE: CA        DEX
+10BF: E4 &F     CPX $8F
+10C1: FO 09     BEQ $10CC
+10C3: BD 0O O1  LDA $0100,X
+10C6: 9D O02 O1 STA $0102,X
+10C9: 38        SEC
+10CA: BO F2     BCS $10BE
+10CC: E6 &F     INC $8F
+10CE: E64 S&F   INC $8F
+10D0: 38        SEC
+10D1: BO OS     BCS $10D8
+10D3: E98       INX
+10D4: E8        INX
+10D5: %3e       SEC
+10D6: BO D4     BCS $10AC
+10D8: Aé GF     LDX $8F
+10DA: 9A        TXS
+10DB: Aé 8&2    LDX $82
+10DD: A4 83     LDY $83
+10DF: 4C 90 10  JMP $1090
+
+Program 7.19 PAINT subroutine (#1000- #10E1)
