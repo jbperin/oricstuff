@@ -267,7 +267,7 @@ unsigned char getTexturePixel(unsigned char l, unsigned char c){
 }
 
 unsigned char encodeLColor[] = { 0, 2, 5, 7 };
-unsigned char encodeHColor[] = { (0<<3), (2<<3), (5<<3), (7<<3) };
+unsigned char encodeHColor[] = { (0<<3)|0x40, (2<<3)|0x40, (5<<3)|0x40, (7<<3)|0x40 };
 
 // line in [0..65] column in [0..79]
 void colorSquare(unsigned char line, unsigned char column, unsigned char theColor){
@@ -341,12 +341,12 @@ void colorEvenSquare(unsigned char *theAdr, unsigned char theColor){
     // compute the start adress of the screen square to color
     //adr = (unsigned char *)(HIRES_SCREEN_ADDRESS + (line*3)*SCREEN_WIDTH + (column>>1));
     adr = theAdr;
-
-    *adr |= encodeHColor[r];
+    //printf ("%d", *adr); get();
+    *adr = encodeHColor[r];
     adr += SCREEN_WIDTH;
-    *adr |= encodeHColor[g];
+    *adr = encodeHColor[g];
     adr += SCREEN_WIDTH;
-    *adr |= encodeHColor[b];
+    *adr = encodeHColor[b];
 
 
     PROFILE_LEAVE(ROUTINE_COLOREVENSQUARE);
@@ -410,14 +410,14 @@ void drawImage02(){
     PROFILE_ENTER(ROUTINE_DRAW02);
 
     idxScreenCol        = 9;
+    ddaStartValue       = 0;
+    ddaNbVal            = TEXTURE_HEIGHT;
 
     for (ii = 0; ii < 40; ) {
 
-        ddaStartValue       = 0;
-        ddaNbVal            = TEXTURE_HEIGHT;
 
 // =====================================
-//============ EVEN
+// ============ EVEN
 // =====================================
 
         height              = tabHeight[ii];
@@ -429,23 +429,25 @@ void drawImage02(){
 
         ddaInit();
 
-        if ((idxScreenLine >=0) && (idxScreenLine < 64)) {
+        while (idxScreenLine < 0){
+            (*ddaStepFunction)();
+            idxScreenLine   += 1;
+        } 
+        do {
+            (*ddaStepFunction)();
+
             theAdr = (unsigned char *)(HIRES_SCREEN_ADDRESS + multi40[(idxScreenLine<<1) + idxScreenLine] + (idxScreenCol>>1));
             colorEvenSquare(theAdr, bufimg[multi40[ddaCurrentValue] + texcolumn]);
-        }
-        while (ddaCurrentValue < ddaEndValue) {
-            (*ddaStepFunction)(); 
 
-            if ((idxScreenLine >=0) && (idxScreenLine < 64)) {
-                theAdr = (unsigned char *)(HIRES_SCREEN_ADDRESS + multi40[(idxScreenLine<<1) + idxScreenLine] + (idxScreenCol>>1));
-                colorEvenSquare(theAdr, bufimg[multi40[ddaCurrentValue] + texcolumn]);
-            }
             idxScreenLine   += 1;
-        }
+        } while ((ddaCurrentValue < ddaEndValue) && (idxScreenLine < 64));
+
+
+
         ii++;
 
 // =====================================
-//============ ODD
+// ============ ODD
 // =====================================
         height              = tabHeight[ii];
         texcolumn           = tabTexCol[ii];
@@ -456,19 +458,18 @@ void drawImage02(){
 
         ddaInit();
 
-        if ((idxScreenLine >=0) && (idxScreenLine < 64)) {
+        while (idxScreenLine < 0){
+            (*ddaStepFunction)();
+            idxScreenLine   += 1;
+        } 
+        do {
+            (*ddaStepFunction)();
+
             theAdr = (unsigned char *)(HIRES_SCREEN_ADDRESS + multi40[(idxScreenLine<<1) + idxScreenLine] + (idxScreenCol>>1));
             colorOddSquare(theAdr, bufimg[multi40[ddaCurrentValue] + texcolumn]);
-        }
-        while (ddaCurrentValue < ddaEndValue) {
-            (*ddaStepFunction)(); 
 
-            if ((idxScreenLine >=0) && (idxScreenLine < 64)) {
-                theAdr = (unsigned char *)(HIRES_SCREEN_ADDRESS + multi40[(idxScreenLine<<1) + idxScreenLine] + (idxScreenCol>>1));
-                colorOddSquare(theAdr, bufimg[multi40[ddaCurrentValue] + texcolumn]);
-            }
             idxScreenLine   += 1;
-        }
+        } while ((ddaCurrentValue < ddaEndValue) && (idxScreenLine < 64));
 
         ii++;
     }
