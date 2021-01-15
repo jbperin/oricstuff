@@ -47,10 +47,12 @@ def main ():
     stHeight = buffer2cCode("tabHeight", "unsigned char", [40-ii for ii in dda(28,40)])
     stTexCol = buffer2cCode("tabTexCol", "unsigned char", [ii for ii in range(40)])
     stMulti40 = buffer2cCode("multi40", "unsigned int", [40*ii for ii in range(200)])
+    stMulti120 = buffer2cCode("multi120", "unsigned int", [120*ii for ii in range(40)])
     print (stWall)
     print (stHeight)
     print (stTexCol)
     print (stMulti40)
+    print (stMulti120)
 
 if __name__ == "__main__":
     # execute only if run as a script

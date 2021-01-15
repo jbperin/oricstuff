@@ -69,6 +69,11 @@ unsigned int multi40[] = {
         , 7040, 7080, 7120, 7160, 7200, 7240, 7280, 7320, 7360, 7400, 7440, 7480, 7520, 7560, 7600, 7640
         , 7680, 7720, 7760, 7800, 7840, 7880, 7920, 7960};
 
+
+unsigned int multi120[] = {
+        0, 120, 240, 360, 480, 600, 720, 840, 960, 1080, 1200, 1320, 1440, 1560, 1680, 1800
+        , 1920, 2040, 2160, 2280, 2400, 2520, 2640, 2760, 2880, 3000, 3120, 3240, 3360, 3480, 3600, 3720
+        , 3840, 3960, 4080, 4200, 4320, 4440, 4560, 4680};
 //
 // ===== screen.s =====
 //
@@ -400,12 +405,14 @@ void drawImage01(){
     }
     PROFILE_LEAVE(ROUTINE_DRAW01);
 }
+unsigned char *baseAdr;
 void drawImage02(){
     int ii, jj;
 
     signed char idxScreenLine, idxScreenCol;
     unsigned char height, texcolumn;
     unsigned char *theAdr;
+
 
     PROFILE_ENTER(ROUTINE_DRAW02);
 
@@ -427,19 +434,31 @@ void drawImage02(){
 
         ddaNbStep           = height<<1;
 
+        // baseAdr             = (unsigned char *)(HIRES_SCREEN_ADDRESS + (idxScreenCol>>1));
+
         ddaInit();
 
         while (idxScreenLine < 0){
             (*ddaStepFunction)();
             idxScreenLine   += 1;
         } 
+
+        // theAdr              = baseAdr + multi120[idxScreenLine]; 
+        // theAdr              = baseAdr + multi40[(idxScreenLine<<1) + idxScreenLine]; 
+        theAdr              = (unsigned char *)(HIRES_SCREEN_ADDRESS 
+                                    // + multi120[idxScreenLine]
+                                    + multi40[(idxScreenLine<<1) + idxScreenLine]
+                                    + (idxScreenCol>>1));
+
         do {
             (*ddaStepFunction)();
 
-            theAdr = (unsigned char *)(HIRES_SCREEN_ADDRESS + multi40[(idxScreenLine<<1) + idxScreenLine] + (idxScreenCol>>1));
+            //theAdr = (unsigned char *)(HIRES_SCREEN_ADDRESS + multi40[(idxScreenLine<<1) + idxScreenLine] + (idxScreenCol>>1));
             colorEvenSquare(theAdr, bufimg[multi40[ddaCurrentValue] + texcolumn]);
 
             idxScreenLine   += 1;
+            theAdr          += 120;
+
         } while ((ddaCurrentValue < ddaEndValue) && (idxScreenLine < 64));
 
 
@@ -462,13 +481,21 @@ void drawImage02(){
             (*ddaStepFunction)();
             idxScreenLine   += 1;
         } 
+
+        // theAdr              = baseAdr + multi120[idxScreenLine];
+        // theAdr              = baseAdr + multi40[(idxScreenLine<<1) + idxScreenLine];
+        theAdr              = (unsigned char *)(HIRES_SCREEN_ADDRESS 
+                                    // + multi120[idxScreenLine] 
+                                    + multi40[(idxScreenLine<<1) + idxScreenLine]
+                                    + (idxScreenCol>>1));
+
         do {
             (*ddaStepFunction)();
 
-            theAdr = (unsigned char *)(HIRES_SCREEN_ADDRESS + multi40[(idxScreenLine<<1) + idxScreenLine] + (idxScreenCol>>1));
             colorOddSquare(theAdr, bufimg[multi40[ddaCurrentValue] + texcolumn]);
 
             idxScreenLine   += 1;
+            theAdr          += 120;
         } while ((ddaCurrentValue < ddaEndValue) && (idxScreenLine < 64));
 
         ii++;
