@@ -1,4 +1,7 @@
 
+#include "lib.h"
+#include "profile.h"
+
 #include "glOric.h"
 #include "params.h"
 
@@ -51,8 +54,20 @@
 #define ANGLE_MAX 0xC0
 #define ANGLE_VIEW 0xE0
 
-int multi40[] = {0, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440, 480, 520, 560, 600, 640, 680, 720, 760, 800, 840, 880, 920, 960, 1000, 1040};
-
+unsigned int multi40[] = {
+        0, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440, 480, 520, 560, 600
+        , 640, 680, 720, 760, 800, 840, 880, 920, 960, 1000, 1040, 1080, 1120, 1160, 1200, 1240
+        , 1280, 1320, 1360, 1400, 1440, 1480, 1520, 1560, 1600, 1640, 1680, 1720, 1760, 1800, 1840, 1880
+        , 1920, 1960, 2000, 2040, 2080, 2120, 2160, 2200, 2240, 2280, 2320, 2360, 2400, 2440, 2480, 2520
+        , 2560, 2600, 2640, 2680, 2720, 2760, 2800, 2840, 2880, 2920, 2960, 3000, 3040, 3080, 3120, 3160
+        , 3200, 3240, 3280, 3320, 3360, 3400, 3440, 3480, 3520, 3560, 3600, 3640, 3680, 3720, 3760, 3800
+        , 3840, 3880, 3920, 3960, 4000, 4040, 4080, 4120, 4160, 4200, 4240, 4280, 4320, 4360, 4400, 4440
+        , 4480, 4520, 4560, 4600, 4640, 4680, 4720, 4760, 4800, 4840, 4880, 4920, 4960, 5000, 5040, 5080
+        , 5120, 5160, 5200, 5240, 5280, 5320, 5360, 5400, 5440, 5480, 5520, 5560, 5600, 5640, 5680, 5720
+        , 5760, 5800, 5840, 5880, 5920, 5960, 6000, 6040, 6080, 6120, 6160, 6200, 6240, 6280, 6320, 6360
+        , 6400, 6440, 6480, 6520, 6560, 6600, 6640, 6680, 6720, 6760, 6800, 6840, 6880, 6920, 6960, 7000
+        , 7040, 7080, 7120, 7160, 7200, 7240, 7280, 7320, 7360, 7400, 7440, 7480, 7520, 7560, 7600, 7640
+        , 7680, 7720, 7760, 7800, 7840, 7880, 7920, 7960};
 
 //
 // ===== screen.s =====
@@ -251,57 +266,40 @@ unsigned char getTexturePixel(unsigned char l, unsigned char c){
     return bufimg[multi40[l] + c];
 }
 
-unsigned char encodeColor[] = { 0, 2, 5, 7 };
+unsigned char encodeLColor[] = { 0, 2, 5, 7 };
+unsigned char encodeHColor[] = { (0<<3), (2<<3), (5<<3), (7<<3) };
 
 // line in [0..65] column in [0..79]
 void colorSquare(unsigned char line, unsigned char column, unsigned char theColor){
 
     unsigned char r, g, b;
     unsigned char *adr;
-    unsigned char current_byte;
 
+    PROFILE_ENTER(ROUTINE_COLORSQUARE);
     // retrieve the color components from the color value
     r = (theColor>>4)& 0x03;
     g = (theColor>>2)& 0x03;
     b = (theColor)& 0x03;
-    // printf ("r=%d, g=%d, b=%d\n", r, g, b);
+
     // compute the start adress of the screen square to color
-    adr = (unsigned char *)(HIRES_SCREEN_ADDRESS + (line*3)*SCREEN_WIDTH + (column>>1));
-    // printf ("adr= %d\n", (unsigned int)adr);
+    //adr = (unsigned char *)(HIRES_SCREEN_ADDRESS + (line*3)*SCREEN_WIDTH + (column>>1));
+    adr = (unsigned char *)(HIRES_SCREEN_ADDRESS + multi40[(line<<1) + line] + (column>>1));
 
-    current_byte = *adr;
-    // if lower part of the screen bytes
-    if ((column&0x01) == 0) {
-        current_byte = current_byte | (encodeColor [r]<<3);
+    if ((column&0x01) == 0){
+        *adr |= encodeHColor[r];
+        adr += SCREEN_WIDTH;
+        *adr |= encodeHColor[g];
+        adr += SCREEN_WIDTH;
+        *adr |= encodeHColor[b];
     } else {
-        current_byte = current_byte | encodeColor [r];
+        *adr |= encodeLColor[r];
+        adr += SCREEN_WIDTH;
+        *adr |= encodeLColor[g];
+        adr += SCREEN_WIDTH;
+        *adr |= encodeLColor[b];
     }
-    // printf ("byte change from %d to %d\n", *(adr), current_byte);
-    *(adr) = current_byte;
-    // printf ("adr= %d\n", adr);
 
-    adr += SCREEN_WIDTH;
-
-    current_byte = *adr;
-    // if lower part of the screen bytes
-    if ((column&0x01) == 0) {
-        current_byte = current_byte | (encodeColor [g]<<3);
-    } else {
-        current_byte = current_byte | encodeColor [g];
-    }
-    *(adr) = current_byte;
-
-    adr += SCREEN_WIDTH;
-
-    current_byte = *adr;
-    // if lower part of the screen bytes
-    if ((column&0x01) == 0) {
-        current_byte = current_byte | (encodeColor [b]<<3);
-    } else {
-        current_byte = current_byte | encodeColor [b];
-    }
-    *(adr) = current_byte;
-
+    PROFILE_LEAVE(ROUTINE_COLORSQUARE);
 }
 unsigned char idxWall[] = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -318,20 +316,12 @@ unsigned char tabTexCol[] = {
         , 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
         , 32, 33, 34, 35, 36, 37, 38, 39};      
 
-void main(){
+void drawImage01(){
     int ii, jj;
 
     signed char idxScreenLine, idxScreenCol;
     unsigned char height, texcolumn;
-    hires();
-    prepareRGB();
-
-    //hrDrawChar('A', 10, 12);
-    // colorSquare(30, 40, 60);
-    // for (ii =0; ii < TEXTURE_WIDTH; ii++)
-    //     for (jj =0; jj < TEXTURE_HEIGHT; jj++)
-    //         colorSquare(jj, ii+4, bufimg[jj*TEXTURE_WIDTH + ii]);
-
+    PROFILE_ENTER(ROUTINE_DRAW01);
     for (ii = 0; ii < 40; ii++) {
         height          = tabHeight[ii];
         texcolumn       = tabTexCol[ii];
@@ -355,7 +345,36 @@ void main(){
             }
             idxScreenLine   += 1;
         }
-
     }
+    PROFILE_LEAVE(ROUTINE_DRAW01);
+}
+void drawImage02(){
+    int ii, jj;
 
+    signed char idxScreenLine, idxScreenCol;
+    unsigned char height, texcolumn;
+    
+}
+
+void main(){
+    int ii, jj;
+
+    signed char idxScreenLine, idxScreenCol;
+    unsigned char height, texcolumn;
+    hires();
+    prepareRGB();
+
+    ProfilerInitialize();
+    ProfilerNextFrame();
+    //hrDrawChar('A', 10, 12);
+    // colorSquare(30, 40, 60);
+    // for (ii =0; ii < TEXTURE_WIDTH; ii++)
+    //     for (jj =0; jj < TEXTURE_HEIGHT; jj++)
+    //         colorSquare(jj, ii+4, bufimg[jj*TEXTURE_WIDTH + ii]);
+    //PROFILE_ENTER(ROUTINE_GLOBAL);
+    drawImage01();
+    //PROFILE_LEAVE(ROUTINE_GLOBAL);
+	ProfilerDisplay();	
+    ProfilerTerminate();
+    printf("Done\n");	
 }

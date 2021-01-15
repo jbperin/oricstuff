@@ -1,11 +1,11 @@
 
 
-def buffer2cCode(theName, theBuffer):
+def buffer2cCode(theName, theType, theBuffer):
     theCode = ""
     first = True
     for ii in range(len(theBuffer)):
         if first:
-            theCode += f"unsigned char {theName}[] = {{\n\t"
+            theCode += f"{theType} {theName}[] = {{\n\t"
             first = False
         else:
             theCode += ", "
@@ -43,12 +43,14 @@ def dda(nbVal, nbStep, startValue = 0):
             yield ii
 
 def main ():
-    stWall = buffer2cCode("idxWall", [0 for ii in range(40)])
-    stHeight = buffer2cCode("tabHeight", [40-ii for ii in dda(28,40)])
-    stTexCol = buffer2cCode("tabTexCol", [ii for ii in range(40)])
+    stWall = buffer2cCode("idxWall", "unsigned char", [0 for ii in range(40)])
+    stHeight = buffer2cCode("tabHeight", "unsigned char", [40-ii for ii in dda(28,40)])
+    stTexCol = buffer2cCode("tabTexCol", "unsigned char", [ii for ii in range(40)])
+    stMulti40 = buffer2cCode("multi40", "unsigned int", [40*ii for ii in range(200)])
     print (stWall)
     print (stHeight)
     print (stTexCol)
+    print (stMulti40)
 
 if __name__ == "__main__":
     # execute only if run as a script

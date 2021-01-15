@@ -13,25 +13,32 @@ signed char     ddaCurrentError;
 void            (*ddaStepFunction)(); 
 
 void ddaStep0(){
+    PROFILE_ENTER(ROUTINE_DDASTEP0);
     ddaCurrentValue         += 1;
+    PROFILE_LEAVE(ROUTINE_DDASTEP0);    
 }
+
 void ddaStep1(){
+    PROFILE_ENTER(ROUTINE_DDASTEP1);
     while ((ddaCurrentError<<1) >= ddaNbStep) {
         ddaCurrentError         -= ddaNbStep;
         ddaCurrentValue         += 1;
     }
     ddaCurrentError     += ddaNbVal;
+    PROFILE_LEAVE(ROUTINE_DDASTEP1);    
 }
 void ddaStep2(){
+    PROFILE_ENTER(ROUTINE_DDASTEP2);
     ddaCurrentError         -= ddaNbVal;
     if ((ddaCurrentError<<1) < ddaNbStep) {
         ddaCurrentError     += ddaNbStep;
         ddaCurrentValue     += 1;
     }
+    PROFILE_LEAVE(ROUTINE_DDASTEP2);
 }
 
 void ddaInit(){
-
+    PROFILE_ENTER(ROUTINE_DDAINIT);
     ddaCurrentValue         = ddaStartValue;
     ddaEndValue             = ddaStartValue + ddaNbVal;
 
@@ -45,6 +52,7 @@ void ddaInit(){
         ddaCurrentError     = ddaEndValue;
         ddaStepFunction     = &ddaStep0;
     }
+    PROFILE_LEAVE(ROUTINE_DDAINIT);
 }
 
 // void main (){
